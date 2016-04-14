@@ -102,9 +102,7 @@
 
           <div class="blog-post">
             <p id="main_notes"></p>
-            <div id="main_clean">{% block loginsys %}{% endblock %}
-                                 {% block notes %}{% endblock %}
-                                 {% block search %}{% endblock %}</p></div>
+            <div id="main_clean">{% block content %}{% endblock %}</p></div>
           </div>
 
 
@@ -113,7 +111,6 @@
 
           <div class="sidebar-module sidebar-module-inset">
             {% if username %}
-             {{ request }}
             <h4>О заметках:</h4>
             <li><a href="{% url 'create' %}">Создать заметку</a></li>      {# todo: использовать {% url <...> %} #}
             <li><a href="#" onclick="return my_notes()">Все мои заметки</a></li>

@@ -67,10 +67,11 @@ def filter_favorites(request):
 def note(request, id=None):
     args = {
         'note': Notes.objects.get(id=id),
-        'username': auth.get_user(request).username,   # todo в шаблонах можно использовать request напрямую
-        'category_all': Category.objects.all(),            # http://stackoverflow.com/questions/702592/django-request-in-template
+        'username': auth.get_user(request).username,
+        'category_all': Category.objects.all(),
     }
     return render_to_response('note.html', args)
+
 
 @login_required(login_url='/auth/login/')
 def category(request, category_id=1):
@@ -88,12 +89,10 @@ def category(request, category_id=1):
 
 @login_required(login_url='/auth/login/')
 def note_create(request):
-    if not request.user:   # todo должно быть and
-        raise Http404
     args = {
         'username':  auth.get_user(request).username,
         'category_all': Category.objects.all(),
-        'form': NoteForm(),
+        'form': NoteForm(initial={'category': Category.objects.get(name=u'Заметка')}),
     }
     args.update(csrf(request))
     if request.POST:
@@ -128,10 +127,13 @@ def note_edit(request, id=None):
 @login_required(login_url='/auth/login/')
 def note_del(request, id=None):
     args = {
+        'username': auth.get_user(request).username,
+        'category_all': Category.objects.all(),
         object: Notes.objects.filter(id=id,
                                      author=auth.get_user(request).id).delete()}
     args.update(csrf(request))
     return render_to_response('deleted.html', args)
+
 
 @login_required(login_url='/auth/login/')
 def addfavorites(request, id=None):
@@ -141,6 +143,7 @@ def addfavorites(request, id=None):
     except ObjectDoesNotExist:
         raise Http404
     return redirect(back_url)
+
 
 @login_required(login_url='/auth/login/')
 def removefavorites(request, id=None):

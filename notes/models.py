@@ -39,8 +39,6 @@ class Notes(models.Model):
     text = RichTextField(null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    # todo должно быть два поля с датой: added и modified
-    # первое с auto_new_add второе с auto_now
     author = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
     favorites = models.BooleanField(default=False)
     category = models.ForeignKey(Category, blank=True,
